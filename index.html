@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Map Screenshot</title>
+    <!-- Include the Google Maps JavaScript API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+    <style>
+        /* Style the map container */
+        #mapContainer {
+            width: 600px;
+            height: 400px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+        }
+        /* Style the screenshot button */
+        #screenshotButton {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Map container -->
+    <div id="mapContainer"></div>
+
+    <!-- Search input and screenshot button -->
+    <input type="text" id="locationInput" placeholder="Enter a location">
+    <button id="screenshotButton">Capture and Save Screenshot</button>
+
+    <script>
+        let map;
+        let marker;
+
+        // Initialize the map
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("mapContainer"), {
+                center: { lat: 0, lng: 0 }, // Default center
+                zoom: 2, // Default zoom level
+            });
+
+            // Initialize a marker (hidden by default)
+            marker = new google.maps.Marker({
+                map: map,
+                visible: false,
+            });
+
+            // Add a click event listener to place the marker
+            map.addListener("click", function(event) {
+                placeMarker(event.latLng);
+            });
+        }
+
+        // Place a marker at the selected location
+        function placeMarker(location) {
+            marker.setPosition(location);
+            marker.setVisible(true);
+            map.setCenter(location);
+        }
+
+        // Capture and save the screenshot
+        document.getElementById("screenshotButton").addEventListener("click", function() {
+            const mapContainer = document.getElementById("mapContainer");
+
+            // Capture the screenshot of the map container
+            html2canvas(mapContainer).then(function(canvas) {
+                // Convert the canvas to a Blob
+                canvas.toBlob(function(blob) {
+                    // Create a temporary link element to trigger the download
+                    const a = document.createElement("a");
+                    a.href = URL.createObjectURL(blob); // Use Blob URL
+                    a.download = "map_screenshot.png";
+
+                    // Trigger a click event on the link to initiate the download
+                    document.body.appendChild(a);
+                    a.click();
+
+                    // Clean up the temporary link element
+                    document.body.removeChild(a);
+                }, 'image/png'); // Specify MIME type (image/png)
+            });
+        });
+    </script>
+</body>
+</html>
