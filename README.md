@@ -1,7 +1,7 @@
 # screenshot-capturing
-## Document: Interactive Map Screenshot HTML Page
+## Interactive Map Screenshot HTML Page
 
-This document provides an overview and explanation of the HTML page that enables capturing and saving a screenshot of an interactive map.
+An overview and explanation of the HTML page that enables capturing and saving a screenshot of an interactive map.
 
 ---
 
